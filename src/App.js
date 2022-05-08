@@ -11,13 +11,12 @@ function App() {
 
   return (
     <div>
-      <MainNavigation>
-        <Routes>
-          <Route path="/" element={<AllMeetupsPage />} /> {/* default path */}
-          <Route path="/new-meetup" element={<NewMeetupPage />} />
-          <Route path="/favorites" element={<FavoritesPage />} />
-        </Routes>
-      </MainNavigation>
+      <MainNavigation />
+      <Routes>
+        <Route path="/" element={<AllMeetupsPage />} /> {/* default path */}
+        <Route path="/new-meetup" element={<NewMeetupPage />} />
+        <Route path="/favorites" element={<FavoritesPage />} />
+      </Routes>
     </div>
   );
 }
