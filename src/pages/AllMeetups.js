@@ -1,31 +1,55 @@
-import MeetupList from "../components/meetups/MeetupList"
+import { useState, useEffect } from "react";
 
-const DUMMY_DATA = [
-  {
-    id: "m1",
-    title: "This is a first meetup",
-    image:
-      "https://upload.wikimedia.org/wikipedia/commons/thumb/d/d3/Stadtbild_M%C3%BCnchen.jpg/2560px-Stadtbild_M%C3%BCnchen.jpg",
-    address: "Meetupstreet 5, 12345 Meetup City",
-    description:
-      "This is a first, amazing meetup which you definitely should not miss. It will be a lot of fun!",
-  },
-  {
-    id: "m2",
-    title: "This is a second meetup",
-    image:
-      "https://upload.wikimedia.org/wikipedia/commons/thumb/d/d3/Stadtbild_M%C3%BCnchen.jpg/2560px-Stadtbild_M%C3%BCnchen.jpg",
-    address: "Meetupstreet 5, 12345 Meetup City",
-    description:
-      "This is the second, amazing meetup which you definitely should not miss. It will be a lot of fun!",
-  },
-];
+import MeetupList from "../components/meetups/MeetupList";
 
 function AllMeetupsPage() {
+  const [isLoading, setIsLoading] = useState(true);
+  const [loadedMeetups, setLoadedMeetups] = useState([]);
+
+  useEffect(
+    () => {
+      setIsLoading(true);
+
+      fetch(
+        "https://react-course-8b9c7-default-rtdb.firebaseio.com/meetups.json" // By default GETs data
+      )
+        .then((response) => {
+          return response.json();
+        })
+        .then((data) => {
+          const meetups = [];
+
+          for (const key in data) {
+            const meetup = {
+              id: key,
+              ...data[key],
+            };
+
+            meetups.push(meetup);
+          }
+
+          setIsLoading(false);
+          setLoadedMeetups(meetups);
+        });
+    },
+    [
+      // use external values your function depends on
+      // omit the state changing functions here
+    ]
+  );
+
+  if (isLoading) {
+    return (
+      <section>
+        <p>Loading...</p>
+      </section>
+    );
+  }
+
   return (
     <section>
       <h1>All Meetups</h1>
-      <MeetupList meetups={DUMMY_DATA} />
+      <MeetupList meetups={loadedMeetups} />
     </section>
   );
 }
