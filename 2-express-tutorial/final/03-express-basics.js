@@ -22,6 +22,6 @@ app.listen(5000, () => {
 // app.post
 // app.put
 // app.delete
-// app.all
-// app.use
+// app.all -- works with all of them
+// app.use -- responsible for middleware
 // app.listen

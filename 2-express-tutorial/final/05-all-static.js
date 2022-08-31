@@ -4,7 +4,7 @@ const path = require('path')
 const app = express()
 
 // setup static and middleware
-app.use(express.static('./public'))
+app.use(express.static('../public'))
 
 // app.get('/', (req, res) => {
 //   res.sendFile(path.resolve(__dirname, './navbar-app/index.html'))
@@ -19,3 +19,9 @@ app.all('*', (req, res) => {
 app.listen(5000, () => {
   console.log('server is listening on port 5000....')
 })
+
+// API vs SSR (server side rendering)
+// API: JSON    SSR: Template
+// Send data    Send Template
+// res.json()   res.render()
+

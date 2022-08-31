@@ -4,10 +4,11 @@ const path = require('path')
 const app = express()
 
 // setup static and middleware
-app.use(express.static('./public'))
+// * static file: a file that server doesn't need to change it
+app.use(express.static('../public'))
 
 app.get('/', (req, res) => {
-  res.sendFile(path.resolve(__dirname, './navbar-app/index.html'))
+  res.sendFile(path.resolve(__dirname, '../navbar-app/index.html'))
 })
 
 app.all('*', (req, res) => {
