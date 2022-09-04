@@ -1,27 +1,19 @@
-const http = require("http");
-
 const express = require("express");
 const app = express();
 
-// app.get
-app.get("/", (req, res) => {
-  res.status(200).send("Home Page");
-});
+const people = require('./routes/people');
+const auth = require('./routes/auth')
 
-app.get("/about", (req, res) => {
-  res.status(200).send("About Page");
-});
+// static assets
+app.use(express.static("../methods-public"));
+// parse form data
+app.use(express.urlencoded({ extended: false }));
+// parse json
+app.use(express.json());
 
-// app.post
-// app.put
-// app.delete
+app.use('/api/people', people);
+app.use('/login', auth);
 
-// app.all -- works with all of them
-app.all("*", (req, res) => {
-  res.status(404).send("<h1>resource not found</h1>");
-});
-// app.use -- responsible for middleware
-// app.listen
 app.listen(5000, () => {
-  console.log("...");
+  console.log("Server is listening on port 5000....");
 });
