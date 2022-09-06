@@ -4,6 +4,7 @@ const { connectToDb, getDb } = require("./database");
 
 // init app and middleware
 const app = express();
+app.use(express.json());
 
 // database connection
 let db;
@@ -48,8 +49,21 @@ app.get("/books/:id", (req, res) => {
       .then((doc) => {
         res.status(200).json(doc);
       })
-      .catch((err) => {
+      .catch(() => {
         res.status(500).json({ error: "Could not fetch the document" });
       });
   }
+});
+
+app.post("/books", (req, res) => {
+  const book = req.body; // a book object
+
+  db.collection("books")
+    .insertOne(book)
+    .then((result) => {
+      res.status(201).json(result);
+    })
+    .catch(() => {
+      res.status(500).json({ error: "Could not create a new document" });
+    });
 });
