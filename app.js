@@ -82,3 +82,20 @@ app.delete("/books/:id", (req, res) => {
       });
   }
 });
+
+app.patch("/books/:id", (req, res) => {
+  const updates = req.body; 
+
+  if (!ObjectId.isValid(req.params.id)) {
+    res.status(500).json({ error: "Not a valid document ID" });
+  } else {
+    db.collection("books")
+      .updateOne({ _id: ObjectId(req.params.id) }, { $set: updates })
+      .then((result) => {
+        res.status(200).json(result);
+      })
+      .catch(() => {
+        res.status(500).json({ error: "Could not update the document" });
+      });
+  }
+});
