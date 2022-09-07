@@ -1,3 +1,5 @@
+require('dotenv').config()
+
 const express = require("express");
 const { ObjectId } = require("mongodb");
 const { connectToDb, getDb } = require("./database");
@@ -20,6 +22,10 @@ connectToDb((err) => {
 
 // routes
 app.get("/books", (req, res) => {
+  // current page
+  const page = req.query.p || 0;
+  const booksPerPage = 3;
+
   let books = [];
 
   /* find() returns a cursor that points to a set of documents outlined by our query.
@@ -29,6 +35,8 @@ app.get("/books", (req, res) => {
     .sort({
       author: 1, // sort by author in ascending order
     })
+    .skip(page * booksPerPage)
+    .limit(booksPerPage)
     .forEach((book) => {
       books.push(book);
     })
