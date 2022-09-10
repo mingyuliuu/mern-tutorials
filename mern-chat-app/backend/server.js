@@ -11,6 +11,9 @@ connectDB();
 
 const PORT = process.env.PORT || 5000;
 
+// To accept JSON data
+app.use(express.json()); 
+
 app.listen(PORT, () => {
   console.log(`Server started on PORT ${PORT}`.blue.bold);
 });
