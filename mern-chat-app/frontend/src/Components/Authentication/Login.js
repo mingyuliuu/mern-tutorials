@@ -6,15 +6,75 @@ import {
   InputGroup,
   InputRightElement,
   VStack,
+  useToast
 } from "@chakra-ui/react";
 import React, { useState } from "react";
+import axios from "axios";
+import { useHistory } from "react-router";
 
 const Login = () => {
   const [email, setEmail] = useState();
   const [password, setPassword] = useState();
   const [showPassword, setShowPassword] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
-  const submitHandler = () => {};
+  const toast = useToast();
+  const history = useHistory();
+
+  const submitHandler = async () => {
+    setIsLoading(true);
+
+    if (!email || !password) {
+      toast({
+        title: "Please fill all the fields",
+        status: "warning",
+        duration: 5000,
+        isClosable: true,
+        position: "bottom",
+      });
+      setIsLoading(false);
+      return;
+    }
+
+    try {
+      const config = {
+        headers: {
+          "Content-type": "application/json",
+        },
+      };
+
+      const { data } = await axios.post(
+        "/api/user/login",
+        { email, password },
+        config
+      );
+
+      console.log(data);
+
+      toast({
+        title: "You've successfully logged into your account!",
+        status: "success",
+        duration: 5000,
+        isClosable: true,
+        position: "bottom",
+      });
+
+      localStorage.setItem("userInfo", JSON.stringify(data));
+      setIsLoading(false);
+      history.push("/chats");
+    } catch (error) {
+      toast({
+        title: "There was an error!",
+        description: error.response.data.message,
+        status: "error",
+        duration: 5000,
+        isClosable: true,
+        position: "bottom",
+      });
+
+      setIsLoading(false);
+    }
+  };
 
   return (
     <VStack spacing="12px" color="black" width="">
@@ -23,6 +83,7 @@ const Login = () => {
         <FormLabel>Email</FormLabel>
         <Input
           placeholder="Enter Your Email"
+          value={email}
           onChange={(event) => setEmail(event.target.value)}
         />
       </FormControl>
@@ -34,6 +95,7 @@ const Login = () => {
           <Input
             type={showPassword ? "text" : "password"}
             placeholder="Enter Your Password"
+            value={password}
             onChange={(event) => setPassword(event.target.value)}
           />
           <InputRightElement width="4.5rem">
@@ -54,6 +116,7 @@ const Login = () => {
         width="100%"
         style={{ marginTop: 25 }}
         onClick={submitHandler}
+        isLoading={isLoading}
       >
         Login
       </Button>
