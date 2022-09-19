@@ -10,7 +10,7 @@ import {
   useToast,
 } from "@chakra-ui/react";
 import axios from "axios";
-import { useHistory } from "react-router";
+import { useNavigate } from "react-router-dom";
 
 const Signup = () => {
   const [name, setName] = useState();
@@ -23,7 +23,7 @@ const Signup = () => {
   const [isLoading, setIsLoading] = useState(false);
 
   const toast = useToast();
-  const history = useHistory();
+  const navigate = useNavigate();
 
   const postProfileImage = (pics) => {
     setIsLoading(true);
@@ -127,7 +127,7 @@ const Signup = () => {
 
       localStorage.setItem("userInfo", JSON.stringify(data));
       setIsLoading(false);
-      history.push("/chats");
+      navigate("/chats");
     } catch (error) {
       toast({
         title: "There was an error!",
